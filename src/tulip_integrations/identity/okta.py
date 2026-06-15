@@ -10,7 +10,9 @@ reference (a low-risk and a high-risk sample user) so it runs in CI with no
 credentials.
 
 ``disable`` is a **write** — gate it through ``ctx.actions`` / ``approve()``.
-UNVERIFIED LIVE PATH.
+LIVE PATH: exercised against a mocked HTTP transport in
+``tests/test_live_paths.py`` (request shape + response parsing verified); not
+yet run against a real Okta tenant.
 """
 
 from __future__ import annotations
