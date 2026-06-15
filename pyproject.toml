@@ -29,6 +29,7 @@ vuln-wiz = []
 # First-wave domain vendors (live paths run on httpx, a core dep; offline needs nothing).
 edr-crowdstrike = []
 identity-okta = []
+identity-auth0 = []
 threat-intel-virustotal = []
 # Compute (GPU-cloud) probes for inference fingerprinting. RunPod needs its SDK;
 # Lambda Cloud uses httpx (a core dep), so it carries no extra runtime dep.

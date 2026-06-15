@@ -16,6 +16,7 @@ from tulip.security import (
 )
 
 from tulip_integrations.edr.crowdstrike import CrowdStrikeEndpoint, crowdstrike_adapter
+from tulip_integrations.identity.auth0 import Auth0Identity, auth0_adapter
 from tulip_integrations.identity.okta import OktaIdentity, okta_adapter
 from tulip_integrations.threat_intel.virustotal import VirusTotalIntel, virustotal_adapter
 
@@ -23,7 +24,15 @@ from tulip_integrations.threat_intel.virustotal import VirusTotalIntel, virustot
 def test_providers_satisfy_their_ports() -> None:
     assert isinstance(CrowdStrikeEndpoint(), EndpointSource)
     assert isinstance(OktaIdentity(), IdentitySource)
+    assert isinstance(Auth0Identity(), IdentitySource)
     assert isinstance(VirusTotalIntel(), ThreatIntelSource)
+
+
+async def test_auth0_identity_offline() -> None:
+    ctx = SecurityContext(identity=Auth0Identity())
+    rec = await ctx.identity.get_user("mallory@example.com")
+    assert rec["source"] == "offline-sample"
+    assert (await ctx.identity.risk("mallory@example.com"))["risk"] == "high"
 
 
 async def test_a_fully_vendor_backed_context_works_offline() -> None:
@@ -48,5 +57,5 @@ async def test_endpoint_isolate_and_identity_disable_are_simulated_offline() -> 
 def test_adapters_conform() -> None:
     from tulip.security.testing import assert_adapter_conformance
 
-    for adapter in (crowdstrike_adapter(), okta_adapter(), virustotal_adapter()):
+    for adapter in (crowdstrike_adapter(), okta_adapter(), auth0_adapter(), virustotal_adapter()):
         assert_adapter_conformance(adapter)
