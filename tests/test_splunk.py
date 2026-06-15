@@ -12,8 +12,8 @@ from __future__ import annotations
 from tulip.security import security_toolset
 from tulip.security.testing import assert_adapter_conformance, assert_tool_returns_json
 
-from tulip_integrations.security import splunk_threat_hunt
-from tulip_integrations.security.splunk import splunk_adapter, splunk_search, splunk_siem_tool
+from tulip_integrations.playbooks import splunk_threat_hunt
+from tulip_integrations.siem.splunk import splunk_adapter, splunk_search, splunk_siem_tool
 
 
 def test_adapter_conforms_to_core_contract() -> None:

@@ -8,8 +8,8 @@ from __future__ import annotations
 from tulip.security import is_finding, security_toolset
 from tulip.security.testing import assert_adapter_conformance, assert_tool_returns_json
 
-from tulip_integrations.security import ai_spm_review
-from tulip_integrations.security.wiz import (
+from tulip_integrations.playbooks import ai_spm_review
+from tulip_integrations.vuln.wiz import (
     wiz_adapter,
     wiz_inventory,
     wiz_issues,
