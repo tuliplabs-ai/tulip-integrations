@@ -24,6 +24,12 @@ dependencies = [
 siem-splunk = []
 # Wiz AI-SPM uses OAuth2 + GraphQL over httpx (a core dep) — no extra runtime dep.
 wiz-aispm = []
+# Domain-named alias (the repo is organised by domain: siem/ vuln/ edr/ …).
+vuln-wiz = []
+# First-wave domain vendors (live paths run on httpx, a core dep; offline needs nothing).
+edr-crowdstrike = []
+identity-okta = []
+threat-intel-virustotal = []
 # Compute (GPU-cloud) probes for inference fingerprinting. RunPod needs its SDK;
 # Lambda Cloud uses httpx (a core dep), so it carries no extra runtime dep.
 compute-runpod = ["runpod>=1.0"]

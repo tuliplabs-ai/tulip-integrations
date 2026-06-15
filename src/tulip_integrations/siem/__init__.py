@@ -1,11 +1,7 @@
 # Copyright 2026 Tulip Labs
 # SPDX-License-Identifier: Apache-2.0
 
-"""Back-compat shim — Splunk moved to the domain layout ``tulip_integrations.siem``.
-
-Prefer ``from tulip_integrations.siem.splunk import ...``. This re-export keeps
-the old path working.
-"""
+"""SIEM integrations — log/alert search providers (Splunk, Elastic, …)."""
 
 from tulip_integrations.siem.splunk import (
     SplunkLogs,
