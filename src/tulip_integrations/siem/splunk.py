@@ -10,7 +10,7 @@ lives **outside** the core SDK, depends on it one-way, implements the core
 (the LangChain model) and wired in via ``security_toolset(extra=...)``::
 
     from tulip.security import security_toolset
-    from tulip_integrations.security.splunk import splunk_siem_tool
+    from tulip_integrations.siem.splunk import splunk_siem_tool
 
     tools = security_toolset(siem=False, extra=[splunk_siem_tool])
 

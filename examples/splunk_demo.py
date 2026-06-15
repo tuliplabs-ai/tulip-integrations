@@ -14,8 +14,8 @@ model prescribes.
 from __future__ import annotations
 
 from tulip.security import security_toolset
-from tulip_integrations.security import splunk_threat_hunt
-from tulip_integrations.security.splunk import splunk_adapter, splunk_search
+from tulip_integrations.playbooks import splunk_threat_hunt
+from tulip_integrations.siem.splunk import splunk_adapter, splunk_search
 
 
 def main() -> int:
