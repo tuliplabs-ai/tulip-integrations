@@ -8,6 +8,7 @@ investigation code stays vendor-agnostic.
 
 from __future__ import annotations
 
+from pytest import MonkeyPatch
 from tulip.security import (
     EndpointSource,
     IdentitySource,
@@ -28,7 +29,10 @@ def test_providers_satisfy_their_ports() -> None:
     assert isinstance(VirusTotalIntel(), ThreatIntelSource)
 
 
-async def test_auth0_identity_offline() -> None:
+async def test_auth0_identity_offline(monkeypatch: MonkeyPatch) -> None:
+    # Hermetic: force the offline fallback even when a dev shell has live Auth0 creds.
+    for var in ("AUTH0_MGMT_TOKEN", "AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET"):
+        monkeypatch.delenv(var, raising=False)
     ctx = SecurityContext(identity=Auth0Identity())
     rec = await ctx.identity.get_user("mallory@example.com")
     assert rec["source"] == "offline-sample"
