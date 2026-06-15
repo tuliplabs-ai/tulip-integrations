@@ -1,11 +1,7 @@
 # Copyright 2026 Tulip Labs
 # SPDX-License-Identifier: Apache-2.0
 
-"""Back-compat shim — Wiz moved to the domain layout ``tulip_integrations.vuln``.
-
-Prefer ``from tulip_integrations.vuln.wiz import ...``. This re-export keeps the
-old path working.
-"""
+"""Vulnerability / CNAPP / AI-SPM integrations (Wiz, Tenable, …)."""
 
 from tulip_integrations.vuln.wiz import (
     wiz_adapter,
