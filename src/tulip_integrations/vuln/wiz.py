@@ -21,9 +21,10 @@ authenticates (OAuth2 client-credentials) and queries the Wiz GraphQL API;
 with none set it returns a deterministic, benign offline sample so it runs in
 CI with no credentials.
 
-UNVERIFIED LIVE PATH: the GraphQL queries are written to Wiz's documented shape
-but have not been run against a real tenant — adjust fields per your Wiz
-deployment. Only the offline sample path is exercised in CI.
+LIVE PATH: exercised against a mocked HTTP transport in
+``tests/test_live_paths.py`` (OAuth2 + GraphQL request shape + response parsing
+verified); Wiz has no free tier, so not run against a real tenant — adjust
+fields per your Wiz deployment.
 """
 
 from __future__ import annotations

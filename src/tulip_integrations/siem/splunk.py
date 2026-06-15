@@ -19,9 +19,9 @@ Splunk/Elastic-shaped endpoint; with neither set it returns a deterministic,
 benign offline sample (RFC 5737 / RFC 1918 docs ranges) so it runs in CI with
 no credentials.
 
-UNVERIFIED LIVE PATH: the live branch is written to Splunk's documented export
-shape but has not been run against a real instance — adjust the path/fields per
-deployment. Only the offline sample path is exercised in CI.
+LIVE PATH: exercised against a mocked HTTP transport in
+``tests/test_live_paths.py`` (request shape + response parsing verified); not
+yet run against a real Splunk instance — adjust the path/fields per deployment.
 """
 
 from __future__ import annotations

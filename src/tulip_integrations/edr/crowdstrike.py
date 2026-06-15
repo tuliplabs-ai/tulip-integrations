@@ -10,7 +10,10 @@ the bundled, benign offline reference (the core EDR sample) so it runs in CI
 with no credentials.
 
 ``isolate`` is a **containment write** — gate it through ``ctx.actions`` /
-``approve()`` before calling. UNVERIFIED LIVE PATH.
+``approve()`` before calling. LIVE PATH: exercised against a mocked HTTP
+transport in ``tests/test_live_paths.py`` (request shape + response parsing
+verified); CrowdStrike has no free tier, so not run against a real Falcon
+instance.
 """
 
 from __future__ import annotations
