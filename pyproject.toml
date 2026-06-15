@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tulip-integrations"
+version = "0.1.0"
+description = "Community security integrations for the Tulip agentic-AI security SDK — vendor templates (SIEM, EDR, threat-intel, posture) and playbooks that plug into tulip-agents."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+# One-way dependency: integrations depend on the core SDK, never the reverse
+# (the langchain-community → langchain-core relationship).
+dependencies = [
+    "tulip-agents>=1.0",
+]
+
+[project.optional-dependencies]
+# Per-vendor extras. The Splunk/Elastic SIEM adapter runs its live path on
+# httpx (a tulip-agents core dependency) and its offline sample on the stdlib,
+# so the extra carries no extra runtime dep today — it documents intent and is
+# the place to pin a vendor SDK if one is ever needed.
+siem-splunk = []
+# Wiz AI-SPM uses OAuth2 + GraphQL over httpx (a core dep) — no extra runtime dep.
+wiz-aispm = []
+# Compute (GPU-cloud) probes for inference fingerprinting. RunPod needs its SDK;
+# Lambda Cloud uses httpx (a core dep), so it carries no extra runtime dep.
+compute-runpod = ["runpod>=1.0"]
+compute-lambda = []
+# Convenience meta-extra: everything.
+all = []
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6", "mypy>=1.11"]
+
+[project.urls]
+Homepage = "https://tulipagents.ai/"
+Core = "https://github.com/tuliplabs-ai/sdk-python"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tulip_integrations"]
+
+[tool.hatch.envs.default]
+dependencies = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6", "mypy>=1.11"]
+
+[tool.hatch.envs.default.scripts]
+# Mirror the core repo's hatch ergonomics.
+sdk = "python -m pip install -e {env:TULIP_SDK_DIR:../tulip-agents}"
+test = "pytest {args:tests}"
+lint = "ruff check src tests examples"
+typecheck = "mypy src/tulip_integrations"
+check = ["ruff check src tests examples", "mypy src/tulip_integrations", "pytest tests"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]  # line length is the formatter's job (mirrors core)
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
