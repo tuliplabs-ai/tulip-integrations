@@ -9,8 +9,10 @@ queries the VirusTotal v3 API; with none set it returns the bundled, benign
 offline reference (the core ``enrich_indicator`` sample) so it runs in CI with
 no credentials.
 
-UNVERIFIED LIVE PATH: the live branch follows VirusTotal's documented v3 shape
-but is not run against the API in CI.
+VERIFIED: the live v3 path was confirmed against the VirusTotal API on
+2026-06-15 (clean IP → 0 detections; EICAR hash → malicious). The live check is
+re-runnable via ``tests/test_live_virustotal.py`` when ``VT_API_KEY`` is set
+(it skips in CI, which has no key).
 """
 
 from __future__ import annotations
