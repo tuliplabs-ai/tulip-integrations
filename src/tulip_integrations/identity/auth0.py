@@ -16,7 +16,8 @@ resolved in this order:
 3. None set → benign offline reference sample (a low-risk and a high-risk user).
 
 ``disable`` is a **write** (blocks the user) — gate it through ``ctx.actions`` /
-``approve()``. UNVERIFIED LIVE PATH until run against a tenant.
+``approve()``. Live path verified 2026-06-15 (client_credentials grant + Management
+API ``/users-by-email``) — see ``tests/test_live_auth0.py``.
 """
 
 from __future__ import annotations
