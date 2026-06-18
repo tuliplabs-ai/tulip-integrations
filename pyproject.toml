@@ -35,6 +35,9 @@ threat-intel-virustotal = []
 # Lambda Cloud uses httpx (a core dep), so it carries no extra runtime dep.
 compute-runpod = ["runpod>=1.0"]
 compute-lambda = []
+# Notify / handoff — Slack incoming webhook over httpx (a core dep), so no extra
+# runtime dep. Live-only: no webhook configured -> it raises, never fakes a send.
+notify-slack = []
 # Convenience meta-extra: everything.
 all = []
 dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6", "mypy>=1.11"]
