@@ -72,7 +72,9 @@ def _live(path: str) -> dict[str, Any] | None:
         return None
     import httpx
 
-    with httpx.Client(base_url=_GRAPH, headers={"Authorization": f"Bearer {token}"}, timeout=30.0) as c:
+    with httpx.Client(
+        base_url=_GRAPH, headers={"Authorization": f"Bearer {token}"}, timeout=30.0
+    ) as c:
         resp = c.get(path)
         resp.raise_for_status()
         return {"source": "microsoft-graph", "data": resp.json()}
@@ -142,7 +144,11 @@ async def entra_user_tool(user: str) -> str:
     return as_json(entra_get_user(user))
 
 
-@tool(name="entra_disable_user", description="Disable a Microsoft Entra user (a write — gate it)", idempotent=True)
+@tool(
+    name="entra_disable_user",
+    description="Disable a Microsoft Entra user (a write — gate it)",
+    idempotent=True,
+)
 async def entra_disable_tool(user: str) -> str:
     return as_json(entra_disable(user))
 

@@ -6,6 +6,7 @@
 The defining check: a risky user grounds into a typed Evidence; a clean user
 abstains. The connector never emits an ungrounded identity verdict.
 """
+
 from __future__ import annotations
 
 from tulip.security import is_finding

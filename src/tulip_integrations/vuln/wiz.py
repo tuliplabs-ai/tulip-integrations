@@ -59,8 +59,18 @@ _SEV = {
 
 # Benign, invented offline AI-BOM + issues. Hosts use RFC 5737 doc ranges.
 _OFFLINE_INVENTORY: list[dict[str, object]] = [
-    {"type": "model-endpoint", "name": "prod-llm-gateway", "provider": "self-hosted vLLM", "exposure": "public"},
-    {"type": "mcp-server", "name": "internal-tools-mcp", "provider": "tulip", "exposure": "private"},
+    {
+        "type": "model-endpoint",
+        "name": "prod-llm-gateway",
+        "provider": "self-hosted vLLM",
+        "exposure": "public",
+    },
+    {
+        "type": "mcp-server",
+        "name": "internal-tools-mcp",
+        "provider": "tulip",
+        "exposure": "private",
+    },
     {"type": "ai-service", "name": "bedrock-claude", "provider": "aws-bedrock", "exposure": "vpc"},
 ]
 
@@ -103,7 +113,11 @@ def wiz_inventory() -> dict[str, object]:
     """Return the AI-BOM — the AI assets Wiz discovered in the environment."""
     if _wiz_creds():
         return _wiz_graphql("inventory")
-    return {"source": "offline-sample", "count": len(_OFFLINE_INVENTORY), "assets": _OFFLINE_INVENTORY}
+    return {
+        "source": "offline-sample",
+        "count": len(_OFFLINE_INVENTORY),
+        "assets": _OFFLINE_INVENTORY,
+    }
 
 
 def wiz_issues(severity: str | None = None) -> dict[str, object]:
@@ -115,7 +129,11 @@ def wiz_issues(severity: str | None = None) -> dict[str, object]:
         floor = _SEV.get(severity.upper(), Severity.INFO)
         from tulip.security import severity_at_least
 
-        issues = [i for i in issues if severity_at_least(_SEV.get(str(i["severity"]), Severity.INFO), floor)]
+        issues = [
+            i
+            for i in issues
+            if severity_at_least(_SEV.get(str(i["severity"]), Severity.INFO), floor)
+        ]
     return {"source": "offline-sample", "count": len(issues), "issues": issues}
 
 
@@ -198,7 +216,9 @@ async def wiz_issues_tool(severity: str = "") -> str:
 
 def wiz_adapter() -> ToolAdapter:
     """The :class:`~tulip.security.SecurityAdapter` for the Wiz integration."""
-    return ToolAdapter(name="wiz", vendor="Wiz AI-SPM", _tools=[wiz_inventory_tool, wiz_issues_tool])
+    return ToolAdapter(
+        name="wiz", vendor="Wiz AI-SPM", _tools=[wiz_inventory_tool, wiz_issues_tool]
+    )
 
 
 __all__ = [

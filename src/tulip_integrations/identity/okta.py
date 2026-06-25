@@ -67,7 +67,11 @@ def okta_get_user(user: str) -> dict[str, Any]:
 
 def okta_risk(user: str) -> dict[str, Any]:
     rec = _record(user)
-    return {"user": user, "risk": rec["risk"], "impossible_travel": rec.get("impossible_travel", False)}
+    return {
+        "user": user,
+        "risk": rec["risk"],
+        "impossible_travel": rec.get("impossible_travel", False),
+    }
 
 
 def okta_signins(user: str) -> dict[str, Any]:
@@ -87,7 +91,11 @@ async def okta_user_tool(user: str) -> str:
     return as_json(okta_get_user(user))
 
 
-@tool(name="okta_disable_user", description="Disable an Okta user (a write — gate it)", idempotent=True)
+@tool(
+    name="okta_disable_user",
+    description="Disable an Okta user (a write — gate it)",
+    idempotent=True,
+)
 async def okta_disable_tool(user: str) -> str:
     return as_json(okta_disable(user))
 
@@ -110,7 +118,9 @@ class OktaIdentity:
 
 
 def okta_adapter() -> ToolAdapter:
-    return ToolAdapter(name="okta", vendor="Okta identity", _tools=[okta_user_tool, okta_disable_tool])
+    return ToolAdapter(
+        name="okta", vendor="Okta identity", _tools=[okta_user_tool, okta_disable_tool]
+    )
 
 
 __all__ = [

@@ -104,7 +104,9 @@ def xsoar_search_incidents(query: str = "", *, page_size: int = 50) -> dict[str,
     }
 
 
-def xsoar_close_incident(incident_id: str, *, reason: str = "resolved by agent") -> dict[str, object]:
+def xsoar_close_incident(
+    incident_id: str, *, reason: str = "resolved by agent"
+) -> dict[str, object]:
     """Close an XSOAR incident — a **write**. ``approve()`` it first.
 
     Offline: a simulated receipt (no state mutated). Live: POSTs the close action.
@@ -142,9 +144,7 @@ def xsoar_incident_to_finding(incident_id: str) -> GroundedFinding:
     else:
         partition = Partition(
             ungrounded=[
-                inference_claim(
-                    f"XSOAR incident {incident_id} is below the grounding bar.", ref
-                )
+                inference_claim(f"XSOAR incident {incident_id} is below the grounding bar.", ref)
             ]
         )
     return ground_finding(
@@ -242,7 +242,9 @@ class CortexXSOAR:
     async def search(self, query: str = "") -> dict[str, object]:
         return xsoar_search_incidents(query)
 
-    async def close(self, incident_id: str, *, reason: str = "resolved by agent") -> dict[str, object]:
+    async def close(
+        self, incident_id: str, *, reason: str = "resolved by agent"
+    ) -> dict[str, object]:
         return xsoar_close_incident(incident_id, reason=reason)
 
 

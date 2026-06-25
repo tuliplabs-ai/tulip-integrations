@@ -68,7 +68,9 @@ async def slack_notify_tool(text: str) -> str:
 
 def slack_adapter() -> ToolAdapter:
     """A :class:`~tulip.security.ToolAdapter` exposing the Slack notify tool."""
-    return ToolAdapter(name="slack", vendor="Slack notify (human handoff)", _tools=[slack_notify_tool])
+    return ToolAdapter(
+        name="slack", vendor="Slack notify (human handoff)", _tools=[slack_notify_tool]
+    )
 
 
 __all__ = ["notify_finding", "slack_adapter", "slack_notify", "slack_notify_tool"]
