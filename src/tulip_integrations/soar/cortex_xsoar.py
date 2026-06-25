@@ -14,7 +14,7 @@ The point of integrating *through* Tulip rather than handing the agent a raw
 XSOAR token: a close/escalate is wrapped in an :class:`~tulip.security.Action`
 and only runs once it clears the admission chain (policy → approval → audit). An
 injected prompt that says "close every incident" can't act on the model's
-say-so. And an incident becomes a grounded :class:`~tulip.security.Finding`
+say-so. And an incident becomes a grounded :class:`~tulip.security.Evidence`
 (:func:`xsoar_incident_to_finding`) — evidence, not a JSON blob the agent must
 trust.
 
@@ -121,9 +121,9 @@ def xsoar_close_incident(incident_id: str, *, reason: str = "resolved by agent")
 
 
 def xsoar_incident_to_finding(incident_id: str) -> GroundedFinding:
-    """Ground an XSOAR incident into a typed Finding (or abstain on a low-severity one).
+    """Ground an XSOAR incident into a typed Evidence (or abstain on a low-severity one).
 
-    High-severity (>=3) incident -> tool-backed evidence -> Finding. Lower ->
+    High-severity (>=3) incident -> tool-backed evidence -> Evidence. Lower ->
     inference-only -> Abstention. The agent acts on grounded evidence, not a raw
     SOAR verdict it must trust.
     """

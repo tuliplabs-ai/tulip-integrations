@@ -7,7 +7,7 @@ Wiz discovers *what AI exists in your cloud* (the AI-BOM) and the posture
 issues around it. This integration brings that into Tulip so an agent can
 **reason over it and emit grounded findings** — the complementary half: Wiz
 finds the attack surface; the Tulip agent investigates it, and every Wiz issue
-becomes a typed, taxonomy-tagged :class:`~tulip.security.Finding` (grounded in
+becomes a typed, taxonomy-tagged :class:`~tulip.security.Evidence` (grounded in
 Wiz's own evidence) instead of an opaque alert.
 
 - :func:`wiz_inventory` — the AI-BOM (models, endpoints, MCP servers, AI
@@ -120,10 +120,10 @@ def wiz_issues(severity: str | None = None) -> dict[str, object]:
 
 
 def wiz_to_findings(severity: str | None = None) -> list[GroundedFinding]:
-    """Ingest Wiz issues and ground each into a typed :class:`Finding`.
+    """Ingest Wiz issues and ground each into a typed :class:`Evidence`.
 
     A Wiz issue is a scanner observation with its own evidence, so it grounds
-    to a Finding (tagged to a threat catalogue) — turning opaque AI-SPM alerts
+    to a Evidence (tagged to a threat catalogue) — turning opaque AI-SPM alerts
     into the same typed, evidence-cited findings the rest of the SDK emits.
     """
     out: list[GroundedFinding] = []

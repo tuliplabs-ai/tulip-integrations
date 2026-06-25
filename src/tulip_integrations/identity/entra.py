@@ -11,7 +11,7 @@ credentials.
 
 Unlike a raw connector, ``entra_risk_to_finding`` GROUNDS the identity-risk
 signal: a risky / impossible-travel user becomes tool-backed evidence that
-clears GSAR (-> a typed ``Finding``); a clean user abstains. That keeps the
+clears GSAR (-> a typed ``Evidence``); a clean user abstains. That keeps the
 integration on the "trusted agents" side of the line — evidence or abstain,
 never a raw verdict.
 
@@ -108,9 +108,9 @@ def entra_disable(user: str) -> dict[str, Any]:
 
 
 def entra_risk_to_finding(user: str) -> GroundedFinding:
-    """Ground an Entra identity-risk signal into a typed Finding (or abstain).
+    """Ground an Entra identity-risk signal into a typed Evidence (or abstain).
 
-    Risky / impossible-travel -> tool-backed evidence -> Finding. Clean ->
+    Risky / impossible-travel -> tool-backed evidence -> Evidence. Clean ->
     inference-only -> Abstention. This is the differentiator: identity risk is
     evidence-grounded, not a raw JSON verdict the agent must trust.
     """
