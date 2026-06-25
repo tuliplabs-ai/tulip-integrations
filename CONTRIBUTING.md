@@ -6,13 +6,16 @@ The repo is organised **by security domain**, not by vendor:
 src/tulip_integrations/
   siem/        # Splunk, Elastic, …        -> SecurityContext.logs
   edr/         # CrowdStrike, …            -> SecurityContext.endpoint
-  identity/    # Okta, Entra, …            -> SecurityContext.identity
-  cloud/       # AWS, Azure, GCP, …        -> SecurityContext.cloud
+  identity/    # Okta, Auth0, Entra, …     -> SecurityContext.identity
   threat_intel/# VirusTotal, …             -> SecurityContext.threat_intel
-  vuln/        # Wiz, Tenable, …
-  ticketing/   # Jira, ServiceNow, …
+  vuln/        # Wiz, …
   compute/     # RunPod, Lambda (GPU probes)
+  notify/      # Slack (human handoff)
+  soar/        # Cortex XSOAR
 ```
+
+Planned domains (not yet shipped — open a PR): `cloud/` (AWS/Azure/GCP →
+`SecurityContext.cloud`), `ticketing/` (Jira, ServiceNow).
 
 A vendor module does two things: ships agent **tools** (the core
 [`SecurityAdapter`](https://github.com/tuliplabs-ai/sdk-python) contract) **and**
