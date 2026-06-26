@@ -48,7 +48,7 @@ _SEV_EMOJI = {"critical": "🔴", "high": "🟠", "medium": "🟡", "low": "🟢
 
 
 def notify_finding(finding: Mapping[str, Any] | Any) -> dict[str, Any]:
-    """Format a Finding (or finding-shaped mapping) and post it to Slack."""
+    """Format a Evidence (or finding-shaped mapping) and post it to Slack."""
     get = finding.get if isinstance(finding, Mapping) else lambda k, d=None: getattr(finding, k, d)
     sev_raw = get("severity", "info")
     sev = str(getattr(sev_raw, "value", sev_raw) or "info")
@@ -68,7 +68,9 @@ async def slack_notify_tool(text: str) -> str:
 
 def slack_adapter() -> ToolAdapter:
     """A :class:`~tulip.security.ToolAdapter` exposing the Slack notify tool."""
-    return ToolAdapter(name="slack", vendor="Slack notify (human handoff)", _tools=[slack_notify_tool])
+    return ToolAdapter(
+        name="slack", vendor="Slack notify (human handoff)", _tools=[slack_notify_tool]
+    )
 
 
 __all__ = ["notify_finding", "slack_adapter", "slack_notify", "slack_notify_tool"]

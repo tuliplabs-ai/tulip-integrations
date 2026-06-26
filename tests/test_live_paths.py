@@ -21,12 +21,24 @@ import pytest
 # Every vendor env var, so each test starts from a known-clean environment even
 # when a dev shell has real creds exported.
 _VENDOR_ENVS = (
-    "AUTH0_MGMT_TOKEN", "AUTH0_DOMAIN", "AUTH0_CLIENT_ID", "AUTH0_CLIENT_SECRET",
-    "OKTA_URL", "OKTA_TOKEN",
-    "SPLUNK_URL", "SPLUNK_TOKEN",
-    "CROWDSTRIKE_URL", "CROWDSTRIKE_TOKEN", "FALCON_URL", "FALCON_TOKEN",
-    "VT_API_KEY", "VIRUSTOTAL_API_KEY",
-    "WIZ_API_ENDPOINT", "WIZ_CLIENT_ID", "WIZ_CLIENT_SECRET", "WIZ_AUTH_URL",
+    "AUTH0_MGMT_TOKEN",
+    "AUTH0_DOMAIN",
+    "AUTH0_CLIENT_ID",
+    "AUTH0_CLIENT_SECRET",
+    "OKTA_URL",
+    "OKTA_TOKEN",
+    "SPLUNK_URL",
+    "SPLUNK_TOKEN",
+    "CROWDSTRIKE_URL",
+    "CROWDSTRIKE_TOKEN",
+    "FALCON_URL",
+    "FALCON_TOKEN",
+    "VT_API_KEY",
+    "VIRUSTOTAL_API_KEY",
+    "WIZ_API_ENDPOINT",
+    "WIZ_CLIENT_ID",
+    "WIZ_CLIENT_SECRET",
+    "WIZ_AUTH_URL",
 )
 
 
@@ -58,6 +70,7 @@ def _mock_http(monkeypatch: pytest.MonkeyPatch, handler):  # type: ignore[no-unt
         def _call(url, **kw):  # type: ignore[no-untyped-def]
             with real_client(transport=transport) as c:
                 return c.request(method, url, **kw)
+
         return _call
 
     monkeypatch.setattr(httpx, "Client", client_factory)
@@ -74,7 +87,10 @@ def test_virustotal_live_path(monkeypatch: pytest.MonkeyPatch) -> None:
         assert req.headers["x-apikey"] == "vt-dummy"
         assert req.url.path.endswith("/ip_addresses/8.8.8.8")
         return httpx.Response(
-            200, json={"data": {"attributes": {"last_analysis_stats": {"malicious": 0, "harmless": 80}}}}
+            200,
+            json={
+                "data": {"attributes": {"last_analysis_stats": {"malicious": 0, "harmless": 80}}}
+            },
         )
 
     reqs = _mock_http(monkeypatch, handler)
@@ -95,7 +111,9 @@ def test_splunk_live_path(monkeypatch: pytest.MonkeyPatch) -> None:
         assert req.method == "POST"
         assert req.url.path == "/services/search/jobs/export"
         assert req.headers["authorization"] == "Bearer sp-tok"
-        return httpx.Response(200, json={"results": [{"_raw": "winword spawned powershell", "host": "WS-1"}]})
+        return httpx.Response(
+            200, json={"results": [{"_raw": "winword spawned powershell", "host": "WS-1"}]}
+        )
 
     _mock_http(monkeypatch, handler)
     from tulip_integrations.siem.splunk import splunk_search
@@ -181,7 +199,9 @@ def test_wiz_live_path(monkeypatch: pytest.MonkeyPatch) -> None:
             return httpx.Response(200, json={"access_token": "wiz-tok"})
         assert req.url.path == "/graphql"
         assert req.headers["authorization"] == "Bearer wiz-tok"
-        return httpx.Response(200, json={"data": {"issues": [{"id": "wiz-AI-001", "severity": "CRITICAL"}]}})
+        return httpx.Response(
+            200, json={"data": {"issues": [{"id": "wiz-AI-001", "severity": "CRITICAL"}]}}
+        )
 
     reqs = _mock_http(monkeypatch, handler)
     from tulip_integrations.vuln.wiz import wiz_issues

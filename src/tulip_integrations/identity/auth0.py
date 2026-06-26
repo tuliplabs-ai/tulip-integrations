@@ -31,8 +31,12 @@ from tulip.tools import tool
 # Benign offline sample (RFC 5737 docs IPs).
 _SAMPLE: dict[str, dict[str, Any]] = {
     "jsmith@example.com": {"risk": "low", "blocked": False, "last_ip": "198.51.100.10"},
-    "mallory@example.com": {"risk": "high", "blocked": False, "impossible_travel": True,
-                            "last_ip": "192.0.2.55"},
+    "mallory@example.com": {
+        "risk": "high",
+        "blocked": False,
+        "impossible_travel": True,
+        "last_ip": "192.0.2.55",
+    },
 }
 
 
@@ -95,14 +99,22 @@ def auth0_get_user(user: str) -> dict[str, Any]:
 
 def auth0_risk(user: str) -> dict[str, Any]:
     rec = _record(user)
-    return {"user": user, "risk": rec["risk"], "impossible_travel": rec.get("impossible_travel", False)}
+    return {
+        "user": user,
+        "risk": rec["risk"],
+        "impossible_travel": rec.get("impossible_travel", False),
+    }
 
 
 def auth0_signins(user: str) -> dict[str, Any]:
     live = _live_get("/logs", {"q": f'user_id:"{user}"', "per_page": 5})
     if live is not None:
         return live
-    return {"user": user, "source": "offline-sample", "signins": [{"ip": _record(user).get("last_ip")}]}
+    return {
+        "user": user,
+        "source": "offline-sample",
+        "signins": [{"ip": _record(user).get("last_ip")}],
+    }
 
 
 def auth0_disable(user: str) -> dict[str, Any]:
@@ -115,7 +127,11 @@ async def auth0_user_tool(user: str) -> str:
     return as_json(auth0_get_user(user))
 
 
-@tool(name="auth0_disable_user", description="Block an Auth0 user (a write — gate it)", idempotent=True)
+@tool(
+    name="auth0_disable_user",
+    description="Block an Auth0 user (a write — gate it)",
+    idempotent=True,
+)
 async def auth0_disable_tool(user: str) -> str:
     return as_json(auth0_disable(user))
 
@@ -138,7 +154,9 @@ class Auth0Identity:
 
 
 def auth0_adapter() -> ToolAdapter:
-    return ToolAdapter(name="auth0", vendor="Auth0 identity", _tools=[auth0_user_tool, auth0_disable_tool])
+    return ToolAdapter(
+        name="auth0", vendor="Auth0 identity", _tools=[auth0_user_tool, auth0_disable_tool]
+    )
 
 
 __all__ = [

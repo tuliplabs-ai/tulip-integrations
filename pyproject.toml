@@ -13,7 +13,7 @@ requires-python = ">=3.11"
 # One-way dependency: integrations depend on the core SDK, never the reverse
 # (the langchain-community → langchain-core relationship).
 dependencies = [
-    "tulip-agents>=1.0",
+    "tulip-agents>=2.0",
 ]
 
 [project.optional-dependencies]

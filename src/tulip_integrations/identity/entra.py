@@ -11,7 +11,7 @@ credentials.
 
 Unlike a raw connector, ``entra_risk_to_finding`` GROUNDS the identity-risk
 signal: a risky / impossible-travel user becomes tool-backed evidence that
-clears GSAR (-> a typed ``Finding``); a clean user abstains. That keeps the
+clears GSAR (-> a typed ``Evidence``); a clean user abstains. That keeps the
 integration on the "trusted agents" side of the line — evidence or abstain,
 never a raw verdict.
 
@@ -72,7 +72,9 @@ def _live(path: str) -> dict[str, Any] | None:
         return None
     import httpx
 
-    with httpx.Client(base_url=_GRAPH, headers={"Authorization": f"Bearer {token}"}, timeout=30.0) as c:
+    with httpx.Client(
+        base_url=_GRAPH, headers={"Authorization": f"Bearer {token}"}, timeout=30.0
+    ) as c:
         resp = c.get(path)
         resp.raise_for_status()
         return {"source": "microsoft-graph", "data": resp.json()}
@@ -108,9 +110,9 @@ def entra_disable(user: str) -> dict[str, Any]:
 
 
 def entra_risk_to_finding(user: str) -> GroundedFinding:
-    """Ground an Entra identity-risk signal into a typed Finding (or abstain).
+    """Ground an Entra identity-risk signal into a typed Evidence (or abstain).
 
-    Risky / impossible-travel -> tool-backed evidence -> Finding. Clean ->
+    Risky / impossible-travel -> tool-backed evidence -> Evidence. Clean ->
     inference-only -> Abstention. This is the differentiator: identity risk is
     evidence-grounded, not a raw JSON verdict the agent must trust.
     """
@@ -142,7 +144,11 @@ async def entra_user_tool(user: str) -> str:
     return as_json(entra_get_user(user))
 
 
-@tool(name="entra_disable_user", description="Disable a Microsoft Entra user (a write — gate it)", idempotent=True)
+@tool(
+    name="entra_disable_user",
+    description="Disable a Microsoft Entra user (a write — gate it)",
+    idempotent=True,
+)
 async def entra_disable_tool(user: str) -> str:
     return as_json(entra_disable(user))
 

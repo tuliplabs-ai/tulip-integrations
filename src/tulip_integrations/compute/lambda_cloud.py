@@ -24,7 +24,12 @@ from typing import Any
 
 from tulip.security import FEATURE_KEYS
 
-_SAMPLE: dict[str, float] = {"ttft_ms_p50": 38.2, "itl_ms_mean": 11.4, "itl_cv": 0.07, "tps_mean": 87.6}
+_SAMPLE: dict[str, float] = {
+    "ttft_ms_p50": 38.2,
+    "itl_ms_mean": 11.4,
+    "itl_cv": 0.07,
+    "tps_mean": 87.6,
+}
 
 
 def _select(raw: Mapping[str, Any]) -> dict[str, float]:

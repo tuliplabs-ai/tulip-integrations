@@ -9,7 +9,7 @@ compute** — plus community playbooks that plug into the core
 
 | Layer | Package | Role |
 |---|---|---|
-| **core** | `tulip-agents` (import `tulip`) | the agentic engine + security **contracts** (`Finding`, `ground_finding`, `SecurityAdapter`, `SecurityContext` ports, the conformance kit, GSAR) + bundled reference/offline adapters |
+| **core** | `tulip-agents` (import `tulip`) | the agentic engine + security **contracts** (`Evidence`, `ground_finding`, `SecurityAdapter`, `SecurityContext` ports, the conformance kit, GSAR) + bundled reference/offline adapters |
 | **community** | `tulip-integrations` (import `tulip_integrations`) | maintained, vendor-specific integration **templates** + community playbooks |
 
 The dependency is **one-way**: integrations import the core contracts; core
@@ -84,7 +84,12 @@ ctx = SecurityContext(
 - **GSAR grounding**: anything that asserts about an asset routes through
   `ground_finding`, so an **ungrounded result abstains** rather than guessing.
 - **Read vs. write** are distinct tools; writes (host isolation, user disable)
-  are marked and meant to be gated behind human approval in agentic use.
+  are marked and meant to be gated behind human approval in agentic use. Note
+  that the identity **disable** writes (`okta_disable`, `auth0_disable`) are
+  currently **simulated offline stubs** — they return a `source: "offline-sample"`
+  receipt and do **not** call the provider, so they never actually lock an account
+  out. Wire the live Graph/Management-API PATCH before approval-gating them as a
+  real enforcement action. (`cs_isolate` does have a live containment path.)
 - Where a domain has a core **port**, the vendor also ships a provider class
   (`SplunkLogs`, `CrowdStrikeEndpoint`, `Auth0Identity`/`OktaIdentity`,
   `VirusTotalIntel`) that plugs into `SecurityContext`.
@@ -93,7 +98,7 @@ ctx = SecurityContext(
 
 | Domain | Vendor | Import (`tulip_integrations…`) | Tools | Env vars (live path) | `SecurityContext` provider |
 |---|---|---|---|---|---|
-| **SIEM** | Splunk / Elastic | `siem.splunk` | `splunk_search` | `SPLUNK_URL`, `SPLUNK_TOKEN` | `SplunkLogs` |
+| **SIEM** | Splunk | `siem.splunk` | `splunk_search` | `SPLUNK_URL`, `SPLUNK_TOKEN` | `SplunkLogs` |
 | **EDR** | CrowdStrike Falcon | `edr.crowdstrike` | `cs_host_timeline`, `cs_detections`, `cs_isolate` ⚠️*write* | `CROWDSTRIKE_URL`/`FALCON_URL`, `CROWDSTRIKE_TOKEN`/`FALCON_TOKEN` | `CrowdStrikeEndpoint` |
 | **Identity** | Okta | `identity.okta` | `okta_get_user`, `okta_risk`, `okta_signins`, `okta_disable` ⚠️*write* | `OKTA_URL`, `OKTA_TOKEN` | `OktaIdentity` |
 | **Identity** | Auth0 | `identity.auth0` | `auth0_get_user`, `auth0_risk`, `auth0_signins`, `auth0_disable` ⚠️*write* | `AUTH0_DOMAIN` + `AUTH0_MGMT_TOKEN` (or `AUTH0_CLIENT_ID` + `AUTH0_CLIENT_SECRET`) | `Auth0Identity` |
@@ -109,8 +114,9 @@ Tool objects are exported with a `_tool` suffix (`splunk_siem_tool`,
 
 ### By domain
 
-**SIEM — Splunk/Elastic.** SPL search over the export endpoint; offline sample
-otherwise.
+**SIEM — Splunk.** SPL search over the export endpoint (the same SPL shape works
+against an Elastic-compatible endpoint; only the Splunk adapter ships today);
+offline sample otherwise.
 ```python
 from tulip_integrations.siem.splunk import splunk_search
 splunk_search("powershell -enc", earliest="-6h", count=50)
@@ -125,11 +131,14 @@ cs_isolate(host_id="abc123")           # write — contains the host
 ```
 
 **Identity — Okta / Auth0.** User lookup, risk signals, recent sign-ins (read),
-and disable/block (write).
+and disable/block (write — currently a **simulated** offline receipt, not a live
+account lockout). Risk signals on the live path read only the bundled sample
+users, so an unknown user grounds to `risk="unknown"` rather than a live risk
+query.
 ```python
 from tulip_integrations.identity.okta import okta_get_user, okta_disable
 okta_get_user("user@example.com")      # read
-okta_disable("user@example.com")       # write
+okta_disable("user@example.com")       # write — offline stub: returns a receipt, locks nobody out yet
 ```
 
 **Threat intel — VirusTotal.** Reputation for an IP, domain, or file hash.
