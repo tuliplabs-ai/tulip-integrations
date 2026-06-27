@@ -4,7 +4,7 @@
 """Conformance + behavior tests for the Splunk integration.
 
 Uses the core conformance kit (`tulip.security.testing`) to prove the adapter
-satisfies the contract — the langchain-tests pattern. Runs offline.
+satisfies the contract — the standard adapter-conformance pattern. Runs offline.
 """
 
 from __future__ import annotations

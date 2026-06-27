@@ -7,7 +7,7 @@ This is the proving template for the integration model: a vendor adapter that
 lives **outside** the core SDK, depends on it one-way, implements the core
 :class:`~tulip.security.SecurityAdapter` contract, and reuses the core toolkit
 (``env`` / ``as_json``) + grounding. It is discovered by **explicit import**
-(the LangChain model) and wired in via ``security_toolset(extra=...)``::
+(the community-package model) and wired in via ``security_toolset(extra=...)``::
 
     from tulip.security import security_toolset
     from tulip_integrations.siem.splunk import splunk_siem_tool

@@ -5,13 +5,13 @@ build-backend = "hatchling.build"
 [project]
 name = "tulip-integrations"
 version = "0.1.0"
-description = "Community security integrations for the Tulip agentic-AI security SDK — vendor templates (SIEM, EDR, threat-intel, posture) and playbooks that plug into tulip-agents."
+description = "Vendor security integrations for Tulip, the safest agentic AI SDK — vendor templates (SIEM, EDR, threat-intel, posture) and playbooks for its security proof domain that plug into tulip-agents."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.11"
 # One-way dependency: integrations depend on the core SDK, never the reverse
-# (the langchain-community → langchain-core relationship).
+# (the standard core + community package split).
 dependencies = [
     "tulip-agents>=2.0",
 ]

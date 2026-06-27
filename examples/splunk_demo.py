@@ -7,8 +7,8 @@
     python examples/splunk_demo.py
 
 Runs with no credentials (offline sample) and no model — it shows the
-explicit-import + ``security_toolset(extra=...)`` wiring that the LangChain
-model prescribes.
+explicit-import + ``security_toolset(extra=...)`` wiring that the
+community-package model prescribes.
 """
 
 from __future__ import annotations

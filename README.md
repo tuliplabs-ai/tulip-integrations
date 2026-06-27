@@ -1,11 +1,19 @@
 # tulip-integrations
 
-**Community security integrations for the [Tulip](https://tulipagents.ai/) agentic AI-security SDK.**
+**Vendor security integrations for [Tulip](https://tulipagents.ai/) — the safest way to build agentic AI.**
+
+[Tulip](https://github.com/tuliplabs-ai/sdk-python) is a full-stack, open-source
+agent SDK where control is native: the router picks the shape, GSAR grounds every
+claim, and the admission gate guards every consequential action. **AI security is
+its flagship proof domain** — the place where that control is most obviously worth
+paying for. This package is the **vendor security adapters** for that track: the
+maintained, vendor-specific integrations that the core SDK's offline reference
+adapters stand in for.
 
 Vendor templates — **SIEM · EDR · identity · threat-intel · vuln/posture · GPU
 compute** — plus community playbooks that plug into the core
 [`tulip-agents`](https://github.com/tuliplabs-ai/sdk-python) SDK. This is the
-**community layer** in a LangChain-style split:
+**community layer** in a core + community package split:
 
 | Layer | Package | Role |
 |---|---|---|
@@ -40,7 +48,7 @@ offline path always runs on core alone):
 
 ## Use — explicit import + `security_toolset(extra=…)`
 
-Discovery is explicit (the LangChain model — no entry-point magic). Import the
+Discovery is explicit (no entry-point magic). Import the
 adapter you want and merge its tools into the core toolset:
 
 ```python
